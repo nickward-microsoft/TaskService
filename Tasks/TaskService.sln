@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TasksAPI", "TasksAPI\TasksAPI.csproj", "{EDEA5D1D-0B28-40B9-9D42-1DD95FB8CE66}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskService", "TasksAPI\TaskService.csproj", "{EDEA5D1D-0B28-40B9-9D42-1DD95FB8CE66}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

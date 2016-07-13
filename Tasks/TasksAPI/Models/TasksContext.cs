@@ -4,13 +4,13 @@ using System.Linq;
 using System.Web;
 using System.Data.Entity;
 
-namespace TasksAPI.Models
+namespace TaskService.Models
 {
-    public class TasksContext : DbContext
+    public class TaskContext : DbContext
     {
         public DbSet<Task> Tasks { get; set; }
 
-        public TasksContext () : base("TasksDb")
+        public TaskContext () : base("TasksDb")
         { }
     }
 }

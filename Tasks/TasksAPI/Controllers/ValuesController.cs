@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using Swashbuckle.Swagger.Annotations;
 
-namespace TasksAPI.Controllers
+namespace TaskService.Controllers
 {
     public class ValuesController : ApiController
     {
