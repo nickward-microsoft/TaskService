@@ -9,5 +9,8 @@ namespace TasksAPI.Models
     public class TasksContext : DbContext
     {
         public DbSet<Task> Tasks { get; set; }
+
+        public TasksContext () : base("TasksDb")
+        { }
     }
 }
