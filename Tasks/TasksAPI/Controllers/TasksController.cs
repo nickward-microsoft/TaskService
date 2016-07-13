@@ -8,13 +8,13 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
-using TasksAPI.Models;
+using TaskService.Models;
 
-namespace TasksAPI.Controllers
+namespace TaskService.Controllers
 {
-    public class TasksController : ApiController
+    public class TaskController : ApiController
     {
-        private TasksContext db = new TasksContext();
+        private TaskContext db = new TaskContext();
 
         // GET: api/Tasks
         public IQueryable<Task> GetTasks()
