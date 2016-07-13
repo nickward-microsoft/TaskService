@@ -101,6 +101,44 @@ namespace TasksAPI.Controllers
             return Ok(task);
         }
 
+        // PATCH: api/Tasks/5
+        // this operation marks a task as completed
+        [HttpPatch]
+        [ResponseType(typeof(bool))]
+        public IHttpActionResult PatchTaskCompleted(int id)
+        {
+            Task task = db.Tasks.Find(id);
+            if(task == null)
+            {
+                return NotFound();
+            } else if(task.Complete == true)
+            {
+                return Ok(true);
+            } else
+            {
+                // set task complete flag to true
+                task.Complete = true;
+                db.Entry(task).State = EntityState.Modified;
+
+                try
+                {
+                    db.SaveChanges();
+                    return Ok(true);
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!TaskExists(id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            }
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
