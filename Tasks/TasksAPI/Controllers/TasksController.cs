@@ -6,6 +6,8 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Web.Configuration;
 using System.Web.Http;
 using System.Web.Http.Description;
 using TaskService.Models;
@@ -15,6 +17,7 @@ namespace TaskService.Controllers
     public class TaskController : ApiController
     {
         private TaskContext db = new TaskContext();
+        private string hectagonapikey = WebConfigurationManager.AppSettings["hectagonapikey"];
 
         // GET: api/Tasks
         public IQueryable<Task> GetTasks()
@@ -123,6 +126,16 @@ namespace TaskService.Controllers
                 try
                 {
                     db.SaveChanges();
+                    using (var client = new HttpClient())
+                    {
+                        client.BaseAddress = new Uri("https://hectagonapi.azure-api.net");
+                        client.DefaultRequestHeaders.Accept.Clear();
+                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                        client.DefaultRequestHeaders.Add("Ocp-Apim-Trace", "true");
+                        client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", hectagonapikey);
+
+                        client.PostAsJsonAsync("notifications/SendTaskCompleteNotification", task);
+                    }
                     return Ok(true);
                 }
                 catch (DbUpdateConcurrencyException)
