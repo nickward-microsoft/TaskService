@@ -108,7 +108,7 @@ namespace TaskService.Controllers
         // this operation marks a task as completed
         [HttpPatch]
         [ResponseType(typeof(bool))]
-        public IHttpActionResult PatchTaskCompleted(int id)
+        public async System.Threading.Tasks.Task<IHttpActionResult> PatchTaskCompleted(int id)
         {
             Task task = db.Tasks.Find(id);
             if(task == null)
@@ -126,16 +126,7 @@ namespace TaskService.Controllers
                 try
                 {
                     db.SaveChanges();
-                    using (var client = new HttpClient())
-                    {
-                        client.BaseAddress = new Uri("https://hectagonapi.azure-api.net");
-                        client.DefaultRequestHeaders.Accept.Clear();
-                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                        client.DefaultRequestHeaders.Add("Ocp-Apim-Trace", "true");
-                        client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", hectagonapikey);
-
-                        client.PostAsJsonAsync("notifications/SendTaskCompleteNotification", task);
-                    }
+                    await SendTaskCompleteNotificationAsync(task);
                     return Ok(true);
                 }
                 catch (DbUpdateConcurrencyException)
@@ -148,6 +139,24 @@ namespace TaskService.Controllers
                     {
                         throw;
                     }
+                }
+            }
+        }
+
+        private async System.Threading.Tasks.Task SendTaskCompleteNotificationAsync(Task task)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("https://hectagonapi.azure-api.net");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Add("Ocp-Apim-Trace", "true");
+                client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", hectagonapikey);
+
+                HttpResponseMessage response = await client.PostAsJsonAsync("notifications/SendTaskCompleteNotification", task);
+                if(response.StatusCode == HttpStatusCode.OK)
+                {
+                    //all good
                 }
             }
         }
