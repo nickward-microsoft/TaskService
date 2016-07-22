@@ -153,7 +153,8 @@ namespace TaskService.Controllers
                 client.DefaultRequestHeaders.Add("Ocp-Apim-Trace", "true");
                 client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", hectagonapikey);
 
-                HttpResponseMessage response = await client.PostAsJsonAsync("notifications/SendTaskCompleteNotification", task);
+                var apiUriString = String.Concat("notifications/SendTaskCompleteNotification/", task.TaskId);
+                HttpResponseMessage response = await client.PostAsync(apiUriString, null);
                 if(response.StatusCode == HttpStatusCode.OK)
                 {
                     //all good
