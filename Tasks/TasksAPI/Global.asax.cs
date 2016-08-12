@@ -11,6 +11,8 @@ namespace TaskService
     {
         protected void Application_Start()
         {
+            Microsoft.ApplicationInsights.Extensibility.TelemetryConfiguration.Active.InstrumentationKey =
+                System.Web.Configuration.WebConfigurationManager.AppSettings["AppInsightsKey"];
             GlobalConfiguration.Configure(WebApiConfig.Register);
         }
     }
